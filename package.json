@@ -1,0 +1,19 @@
+{
+  "name": "plan-vault",
+  "version": "0.1.0",
+  "description": "Building plan library: templates, as-built plans, revisions and maintenance history for organizations that manage many facilities.",
+  "private": true,
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning server/index.js",
+    "seed": "node --disable-warning=ExperimentalWarning server/seed.js",
+    "test": "node --disable-warning=ExperimentalWarning --test test/*.test.js"
+  },
+  "engines": {
+    "node": ">=22.13"
+  },
+  "dependencies": {
+    "express": "^4.22.1",
+    "multer": "^2.0.2"
+  }
+}
