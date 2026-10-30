@@ -1,34 +1,29 @@
 # Render Blueprint: https://render.com/docs/blueprint-spec
-# The persistent disk holds the SQLite database and every uploaded drawing.
-# Disks require a paid instance type and limit the service to one instance.
+# Free plan: no persistent disk, so the database and uploads live on the
+# instance's temporary filesystem. Every restart, redeploy or sleep/wake cycle
+# starts from an empty database, which SEED_DEMO refills with sample data.
+# For real use, switch to a paid plan and add a disk mounted at DATA_DIR.
 services:
   - type: web
     name: plan-vault
     runtime: node
-    plan: starter
+    plan: free
     region: oregon
     buildCommand: npm ci --omit=dev
     startCommand: npm start
     healthCheckPath: /api/health
     autoDeploy: true
-    disk:
-      name: plan-vault-data
-      mountPath: /var/data
-      sizeGB: 10
     envVars:
       - key: NODE_VERSION
         value: 22.22.0
-      - key: DATA_DIR
-        value: /var/data
       - key: SECURE_COOKIES
         value: "1"
       - key: TRUST_PROXY
         value: "1"
-      # Initial "admin" password, used only when the database is empty.
-      # Find it under Environment in the Render dashboard; change it after first sign-in.
+      # Password for the "admin" account. Find it under Environment in the
+      # Render dashboard. Because the free plan resets the database, this is the
+      # password after every restart (a changed password does not persist).
       - key: ADMIN_PASSWORD
         generateValue: true
-      # Load sample sites, templates and work history on first boot. Set to 0
-      # (or delete) before loading real plans; it never overwrites existing data.
       - key: SEED_DEMO
         value: "1"

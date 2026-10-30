@@ -45,16 +45,15 @@ Without the seed, the first start creates an `admin` account and prints its pass
 
 Back up the whole `DATA_DIR`. It contains `planvault.db` and `files/`, which holds the drawings, stored once each by SHA-256. Copying a plan or carrying files into a new revision never duplicates bytes.
 
-## Deploying to Render
+## Deploying to Render (free demo)
 
-`render.yaml` is a Render Blueprint: one Node web service with a 10 GB persistent disk at `/var/data` for the database and drawings. It needs the Starter plan (about $7/month plus disk), because free instances can't have disks.
+`render.yaml` is a Render Blueprint for a **free** web service. The free plan has no persistent disk, so the app **resets to the sample data whenever it restarts**: on each deploy, and when it wakes after sleeping for 15 idle minutes. Uploads and edits made during a demo don't survive that. The first visit after sleeping takes about 30 seconds.
 
-1. Merge this branch into the repo's default branch, or point the Blueprint at this branch.
-2. In Render: **New → Blueprint**, then connect the `build-des-app` GitHub repo. Render reads `render.yaml`, so click **Apply**.
-3. Once it's live, open the service's **Environment** tab and copy `ADMIN_PASSWORD`. Sign in at the `onrender.com` URL as `admin`, then change the password (sidebar → Password).
-4. `SEED_DEMO=1` loads the sample sites and templates on first boot so there's something to show. It never overwrites data and doesn't create the demo editor/viewer accounts. Set it to `0` before loading real plans, and create real users under **Users & audit**.
+1. In Render: **New → Blueprint**, connect GitHub, and pick the `build-des-app` repo and the branch to deploy.
+2. Click **Apply**. The build takes a few minutes.
+3. Open the service's **Environment** tab and copy `ADMIN_PASSWORD`. Sign in at the `onrender.com` URL as `admin`. A changed password won't persist on the free plan, so share this one with demo viewers or create temporary users.
 
-Render snapshots disks daily. For anything beyond a demo, also copy `/var/data` off-site on a schedule. A custom domain can be added under **Settings → Custom Domains**.
+For real use, switch the service to a paid plan, add a disk (for example mounted at `/var/data`), set `DATA_DIR=/var/data`, and set `SEED_DEMO=0`.
 
 ## Typical workflows
 
