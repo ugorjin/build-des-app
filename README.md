@@ -40,8 +40,21 @@ Without the seed, the first start creates an `admin` account and prints its pass
 | `DATA_DIR` | `./data` | SQLite database and uploaded files |
 | `ADMIN_PASSWORD` | random | Initial admin password on an empty database |
 | `SECURE_COOKIES` | unset | Set to `1` when served over HTTPS |
+| `TRUST_PROXY` | unset | Set to `1` behind a platform load balancer (Render) |
+| `SEED_DEMO` | unset | `1` loads sample data on first boot (no demo logins) |
 
 Back up the whole `DATA_DIR`. It contains `planvault.db` and `files/`, which holds the drawings, stored once each by SHA-256. Copying a plan or carrying files into a new revision never duplicates bytes.
+
+## Deploying to Render
+
+`render.yaml` is a Render Blueprint: one Node web service with a 10 GB persistent disk at `/var/data` for the database and drawings. It needs the Starter plan (about $7/month plus disk), because free instances can't have disks.
+
+1. Merge this branch into the repo's default branch, or point the Blueprint at this branch.
+2. In Render: **New → Blueprint**, then connect the `build-des-app` GitHub repo. Render reads `render.yaml`, so click **Apply**.
+3. Once it's live, open the service's **Environment** tab and copy `ADMIN_PASSWORD`. Sign in at the `onrender.com` URL as `admin`, then change the password (sidebar → Password).
+4. `SEED_DEMO=1` loads the sample sites and templates on first boot so there's something to show. It never overwrites data and doesn't create the demo editor/viewer accounts. Set it to `0` before loading real plans, and create real users under **Users & audit**.
+
+Render snapshots disks daily. For anything beyond a demo, also copy `/var/data` off-site on a schedule. A custom domain can be added under **Settings → Custom Domains**.
 
 ## Typical workflows
 

@@ -124,7 +124,9 @@ const TEMPLATES = [
 ];
 
 // Loads demo sites, buildings, templates, derived plans and work history.
-function seedDemo(db, storage) {
+// demoUsers adds editor/viewer accounts with well-known passwords, so it must
+// stay off on anything reachable from the internet.
+function seedDemo(db, storage, { demoUsers = true } = {}) {
   if (db.prepare('SELECT COUNT(*) AS n FROM sites').get().n > 0) {
     console.log('Database already has data; skipping demo seed.');
     return;
@@ -137,7 +139,7 @@ function seedDemo(db, storage) {
       ['editor', 'Facilities Engineer', 'editor', 1],
       ['viewer', 'Maintenance Technician', 'viewer', 0],
     ];
-    for (const [username, display_name, role, clearance] of users) {
+    for (const [username, display_name, role, clearance] of demoUsers ? users : []) {
       if (db.prepare('SELECT 1 FROM users WHERE username = ?').get(username)) continue;
       insert(db, 'users', { username, display_name, role, clearance, password_hash: hashPassword(`${username}-demo-pass`) });
       created.push(`${username} / ${username}-demo-pass`);

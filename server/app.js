@@ -18,7 +18,8 @@ function createApp({ dataDir, secureCookies = false } = {}) {
 
   const app = express();
   app.disable('x-powered-by');
-  app.set('trust proxy', 'loopback');
+  // Behind a platform load balancer (e.g. Render) set TRUST_PROXY=1.
+  app.set('trust proxy', process.env.TRUST_PROXY === '1' ? 1 : 'loopback');
 
   app.use((_req, res, next) => {
     res.set({
@@ -30,6 +31,10 @@ function createApp({ dataDir, secureCookies = false } = {}) {
   });
 
   const api = express.Router();
+  api.get('/health', (_req, res) => {
+    db.prepare('SELECT 1').get();
+    res.json({ ok: true });
+  });
   api.use(express.json({ limit: '1mb' }));
   api.use(sessionMiddleware(db));
   api.use(require('./routes/account')(ctx));
@@ -74,6 +79,7 @@ function createApp({ dataDir, secureCookies = false } = {}) {
   });
 
   app.locals.db = db;
+  app.locals.storage = storage;
   return app;
 }
 
