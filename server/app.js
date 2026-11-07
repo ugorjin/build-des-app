@@ -50,6 +50,8 @@ function createApp({ dataDir, secureCookies = false } = {}) {
       sites: one('SELECT COUNT(*) AS n FROM sites'),
       buildings: one('SELECT COUNT(*) AS n FROM buildings'),
       open_work: one("SELECT COUNT(*) AS n FROM work_records WHERE status IN ('planned', 'in progress')"),
+      work: one('SELECT COUNT(*) AS n FROM work_records'),
+      users: one('SELECT COUNT(*) AS n FROM users WHERE active = 1'),
     });
   });
   api.use(require('./routes/plans')(ctx));

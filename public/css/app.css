@@ -170,6 +170,15 @@ a.stat:hover { border-color: var(--accent); text-decoration: none; }
 .stats.small .stat strong { font-size: 1.2rem; }
 .stat span { color: var(--muted); font-size: .85rem; }
 
+/* ---- Getting started ---- */
+.getting-started .card-head { align-items: flex-start; }
+.getting-started .card-head p { margin: .2rem 0 0; }
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: .75rem 1.25rem; }
+.steps li { display: flex; gap: .65rem; align-items: flex-start; }
+.step-mark { flex: none; width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border); display: grid; place-items: center; font-size: .75rem; font-weight: 700; margin-top: 1px; }
+.steps li.done .step-mark { background: var(--ok); border-color: var(--ok); color: #fff; }
+.steps li.done strong { color: var(--muted); text-decoration: line-through; }
+
 /* ---- Lists & tables ---- */
 .list { list-style: none; margin: 0; padding: 0; }
 .list li { padding: .6rem 0; border-top: 1px solid var(--border); }

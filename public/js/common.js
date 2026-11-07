@@ -51,7 +51,8 @@ export function planFields(plan = {}, { isTemplate = !!plan.is_template } = {}) 
 export async function newPlanDialog({ building_id = null, is_template = false } = {}) {
   const fields = planFields({ is_template }, { isTemplate: is_template });
   if (!is_template) {
-    fields.splice(1, 0, { name: 'building_id', label: 'Building', type: 'select', options: await buildingOptions(), value: building_id, empty: '— Not yet assigned —' });
+    fields.splice(1, 0, { name: 'building_id', label: 'Building', type: 'select', options: await buildingOptions(), value: building_id,
+      empty: '— Not yet assigned —', hint: 'Optional. Leave unassigned for a design not tied to a building yet.' });
   }
   fields.push({ name: 'files', label: 'Drawings & documents', type: 'file', multiple: true, full: true,
     hint: 'PDF, DWG, DXF, IFC, images, ZIP, Office files. You can add more later.' });
